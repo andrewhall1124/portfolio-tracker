@@ -39,7 +39,6 @@ export default function Home() {
 
   const getPortfolioData = async () => {
     await fetchData()
-
   }
 
   const headers = [

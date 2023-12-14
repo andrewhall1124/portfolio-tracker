@@ -1,3 +1,4 @@
+import { ChakraProvider } from "@chakra-ui/react"
 import Link from "next/link"
 
 export default function Layout({children}){
@@ -6,7 +7,7 @@ export default function Layout({children}){
     return(
       <div className="flex gap-4 bg-slate-400 p-4">
         <Link href='/' replace>Portfolio</Link>
-        {/* <Link href='/orders' replace>Orders</Link> */}
+        <Link href='/orders' replace>Orders</Link>
       </div>
     )
   }
@@ -19,12 +20,14 @@ export default function Layout({children}){
   }
 
   return(
-    <div className="flex-1 flex flex-col">
-      <Header/>
-      <div className="flex-1">
-        {children}
+    <ChakraProvider>
+      <div className="flex-1 flex flex-col bg-slate-200">
+        <Header/>
+        <div className="flex-1">
+          {children}
+        </div>
+        <Footer/>
       </div>
-      <Footer/>
-    </div>
+    </ChakraProvider>
   )
 }
