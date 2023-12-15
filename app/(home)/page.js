@@ -16,18 +16,39 @@ export default function Home() {
 
   const getPortfolioData= async () =>{
     try{
-      const response = await supabase.from('orders').select()
+      const {data, status, error} = await supabase.from('orders').select()
+      console.log(data)
+      
+      if(status >= 200){
 
-      if(response.status >= 200){
+        const portfolio = data.reduce((acc, order) => {
+          const { ticker, num_shares, purchase_price, purchase_date, beta } = order;
+        
+          if (!acc[ticker]) {
+            // If the ticker is not in the accumulator, initialize it
+            acc[ticker] = { num_shares, beta, purchase_price: num_shares * purchase_price };
+          } else {
+            // If the ticker is already in the accumulator, update values
+            acc[ticker].num_shares += num_shares;
+            acc[ticker].purchase_price += num_shares * purchase_price;
+            acc[ticker].beta = beta
+          }
+        
+          return acc;
+        }, {});
 
-        const fetchedTickers = response.data.map(stock => stock.ticker)
-        fetchedTickers.push('IWV')
+        for (const ticker in portfolio) {
+          const { num_shares, purchase_price } = portfolio[ticker];
+          portfolio[ticker].average_cost = Math.round((purchase_price / num_shares) * 100)/100;
+        }
 
-        const oldestDate = response.data.reduce((oldest, current) => (current.purchase_date < oldest.purchase_date ? current : oldest)).purchase_date
+        console.log(portfolio)
 
+        const oldestDate = data.reduce((oldest, current) => (current.purchase_date < oldest.purchase_date ? current : oldest)).purchase_date
+  
         const result = await APCA.get(
           {
-            tickers: fetchedTickers, 
+            tickers: Object.keys(portfolio), 
             timeFrame: '1D',
             endTime: dayjs().subtract(1,'day').endOf('day').format(),
             startTime: dayjs(oldestDate).format()
@@ -35,21 +56,31 @@ export default function Home() {
 
         const bars = result.bars
 
-        let portfolio = []
-        for(let i = 0; i < fetchedTickers.length -1; i++){
-          portfolio.push({
-            ticker: fetchedTickers[i],
-            current_price: ((bars[fetchedTickers[i]])[(bars[fetchedTickers[i]].length-1)])['c'],
-            num_shares: response.data[i].num_shares,
-            average_cost: response.data[i].purchase_price,
-            return_td: Math.round(((((bars[fetchedTickers[i]])[(bars[fetchedTickers[i]].length-1)])['c'] / response.data[i].purchase_price) - 1)*10000)/100
-          })
+        for (const ticker in portfolio) {
+          const curr = bars[ticker][bars[ticker].length - 1]['c'];
+        
+          const currentTicker = portfolio[ticker];
+        
+          currentTicker.current_price = curr;
+          currentTicker.return_td = Math.round((curr / currentTicker.average_cost) * 10000) / 100;
         }
-        setPortfolio(portfolio)
+
+        const portfolioArray = Object.entries(portfolio).map(([ticker, data]) => ({
+          ticker,
+          num_shares: data.num_shares,
+          average_cost: data.average_cost,
+          current_price: data.current_price,
+          beta: data.beta,
+          return_td: data.return_td
+        }));
+
+        console.log(portfolioArray)
+
+        setPortfolio(portfolioArray)
       }
 
-      if(response.error){
-        console.log(response.error)
+      if(error){
+        console.log(error)
       }
     }
     catch(error){
