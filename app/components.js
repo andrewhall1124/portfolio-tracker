@@ -1,13 +1,13 @@
 'use client'
 
-export function Table({headers, rows}){
+export function Table({names, headers, rows}){
   return(
     <>
-      <table className="bg-slate-300 w-[800px]">
+      <table className="bg-slate-300">
         <thead>
           <tr>
-            {headers.map((header, index) =>(
-              <td key={index} className="font-semibold text-lg p-2">{header}</td>
+            {names.map((name, index) =>(
+              <td key={index} className="font-semibold text-lg p-2">{name}</td>
             ))}
           </tr>
         </thead>

@@ -1,31 +1,61 @@
 'use client'
 
 import { Button, Card, CardBody, Input } from "@chakra-ui/react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import supabase from "@/app/supabase"
+import { Table } from "@/app/components"
 
 export default function Page(){
   const [ticker, setTicker] = useState("")
-  const [shares, setShares] = useState("")
-  const [price, setPrice] = useState("")
+  const [num_shares, setNumShares] = useState("")
+  const [purhcase_price, setPurchasePrice] = useState("")
   const [beta, setBeta] = useState("")
+
+  const [orders, setOrders] = useState([])
+
+  const headers_name = ["Ticker", "Shares", "Purchase Price", "Beta"]
+  const headers_data = ['ticker', 'num_shares', 'purchase_price', 'beta']
+
+  useEffect(() =>{
+    getOrders()
+  },[])
+
+  const getOrders = async () =>{
+    try{
+      const response = await supabase.from('orders').select()
+
+      if(response.status >= 200){
+        setOrders([...orders, ...response.data])
+      }
+
+      if(response.error){
+        console.error(error)
+      }
+    }
+    catch(error){
+      console.error(error)
+    }
+
+  }
 
   const postOrder = async () =>{
     try{
+      const order = {
+        ticker: ticker,
+        num_shares: num_shares,
+        purchase_price: purhcase_price,
+        beta: beta
+      }
       const response = await supabase
       .from('orders')
-      .insert(
-        { ticker: ticker,
-          num_shares: shares,
-          purchase_price: price,
-          beta: beta
-        })
+      .insert(order)
 
       if(response.status >= 200){
         setTicker("")
-        setShares("")
-        setPrice("")
+        setNumShares("")
+        setPurchasePrice("")
         setBeta("")
+        setOrders([...orders, order])
       }
       
       if(response.error){
@@ -51,13 +81,13 @@ export default function Page(){
               />
               <Input
                 placeholder="Shares"
-                value={shares}
-                onChange={(event) => setShares(event.target.value)}
+                value={num_shares}
+                onChange={(event) => setNumShares(event.target.value)}
               />
               <Input
                 placeholder="Price"
-                value={price}
-                onChange={(event) => setPrice(event.target.value)}
+                value={purhcase_price}
+                onChange={(event) => setPurchasePrice(event.target.value)}
               />
               <Input
                 placeholder="Beta"
@@ -68,13 +98,14 @@ export default function Page(){
             </div>
           </CardBody>
         </Card>
-        {/* <Card>
+        <Card>
           <CardBody>
             <div className="flex flex-col p-4 gap-4 items-center">
               <div className="text-xl font-semibold">All Orders</div>
+              <Table headers={headers_data} names={headers_name} rows={orders}/>
             </div>
           </CardBody>
-        </Card> */}
+        </Card>
       </div>
     </>
   )

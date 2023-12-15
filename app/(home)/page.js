@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Table } from "../components";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import { Card, CardBody, CardHeader } from "@chakra-ui/react";
 
 export default function Home() {
   const [payload, setPayload] = useState()
@@ -48,6 +49,13 @@ export default function Home() {
     'current_price',
   ]
 
+  const names = [
+    "Ticker",
+    "Company Name",
+    "Sector", 
+    "Current Price"
+  ]
+
   const data = [
     {
       ticker: 'AAPL',
@@ -59,8 +67,12 @@ export default function Home() {
 
   return (
     <main className="p-4">
-      <div className="text-xl font-semibold py-4">Portfolio</div>
-      <Table headers={headers} rows={data}/>
+      <Card>
+        <CardBody>
+          <div className="text-xl font-semibold py-4">Portfolio</div>
+          <Table names={names} headers={headers} rows={data}/>
+        </CardBody>
+      </Card>
     </main>
   )
 }
