@@ -9,12 +9,13 @@ export default function Page(){
   const [ticker, setTicker] = useState("")
   const [num_shares, setNumShares] = useState("")
   const [purhcase_price, setPurchasePrice] = useState("")
+  const [purchase_date, setPurchaseDate] = useState("")
   const [beta, setBeta] = useState("")
 
   const [orders, setOrders] = useState([])
 
-  const headers_name = ["Ticker", "Shares", "Purchase Price", "Beta"]
-  const headers_data = ['ticker', 'num_shares', 'purchase_price', 'beta']
+  const headers_name = ["Date", "Ticker", "Shares", "Purchase Price", "Beta"]
+  const headers_data = ['purchase_date','ticker', 'num_shares', 'purchase_price', 'beta']
 
   useEffect(() =>{
     getOrders()
@@ -44,6 +45,7 @@ export default function Page(){
         ticker: ticker,
         num_shares: num_shares,
         purchase_price: purhcase_price,
+        purchase_date: purchase_date,
         beta: beta
       }
       const response = await supabase
@@ -55,6 +57,7 @@ export default function Page(){
         setNumShares("")
         setPurchasePrice("")
         setBeta("")
+        setPurchaseDate("")
         setOrders([...orders, order])
       }
       
@@ -93,6 +96,12 @@ export default function Page(){
                 placeholder="Beta"
                 value={beta}
                 onChange={(event) => setBeta(event.target.value)}
+              />
+              <Input
+                placeholder="Date"
+                value={purchase_date}
+                onChange={(event) => setPurchaseDate(event.target.value)}
+                type="date"
               />
               <Button colorScheme='green' onClick={postOrder}>Add</Button>
             </div>

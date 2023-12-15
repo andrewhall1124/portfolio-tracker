@@ -4,65 +4,75 @@ import { Table } from "../components";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { Card, CardBody, CardHeader } from "@chakra-ui/react";
+import supabase from "../supabase";
+import APCA from "../services/APCA";
 
 export default function Home() {
-  const [payload, setPayload] = useState()
-
-  const symbols = 'AAPL,IBM'
-  const timeFrame = '1D'
-  const startTime = dayjs('2023-09-01').format()
-  const endTime = dayjs().startOf('day').format()
-  const BASE_URL = `https://data.alpaca.markets/v2/stocks/bars?symbols=${symbols}&timeframe=${timeFrame}&start=${startTime}&end=${endTime}&limit=1000&adjustment=raw&feed=sip&sort=asc`
+  const [portfolio, setPortfolio] = useState([])
   
   useEffect(()=>{
     getPortfolioData()
   },[])
 
-  const fetchData = async () =>{
-    const options = {
-      method: 'GET',
-      headers: {
-        accept: 'application/json',
-        'APCA-API-KEY-ID': `${process.env.APCA_API_KEY}`,
-        'APCA-API-SECRET-KEY': `${process.env.APCA_API_SECRET}`,
-      }
-    };
-    
+  const getPortfolioData= async () =>{
     try{
-      const response = await fetch(BASE_URL, options)
-      const data = await response.json()
-      console.log(data.bars)
+      const response = await supabase.from('orders').select()
+
+      if(response.status >= 200){
+
+        const fetchedTickers = response.data.map(stock => stock.ticker)
+        fetchedTickers.push('IWV')
+
+        const oldestDate = response.data.reduce((oldest, current) => (current.purchase_date < oldest.purchase_date ? current : oldest)).purchase_date
+
+        const result = await APCA.get(
+          {
+            tickers: fetchedTickers, 
+            timeFrame: '1D',
+            endTime: dayjs().subtract(1,'day').endOf('day').format(),
+            startTime: dayjs(oldestDate).format()
+          })
+
+        const bars = result.bars
+
+        let portfolio = []
+        for(let i = 0; i < fetchedTickers.length -1; i++){
+          portfolio.push({
+            ticker: fetchedTickers[i],
+            current_price: ((bars[fetchedTickers[i]])[(bars[fetchedTickers[i]].length-1)])['c'],
+            num_shares: response.data[i].num_shares,
+            average_cost: response.data[i].purchase_price,
+            return_td: Math.round(((((bars[fetchedTickers[i]])[(bars[fetchedTickers[i]].length-1)])['c'] / response.data[i].purchase_price) - 1)*10000)/100
+          })
+        }
+        setPortfolio(portfolio)
+      }
+
+      if(response.error){
+        console.log(response.error)
+      }
     }
     catch(error){
-      throw error
+      console.error(error)
     }
   }
 
-  const getPortfolioData = async () => {
-    await fetchData()
-  }
+  /////////////////////////////////
 
   const headers = [
     'ticker',
-    'company_name',
-    'sector',
     'current_price',
+    'num_shares',
+    'average_cost',
+    'return_td'
   ]
 
   const names = [
     "Ticker",
-    "Company Name",
-    "Sector", 
-    "Current Price"
-  ]
-
-  const data = [
-    {
-      ticker: 'AAPL',
-      company_name: 'Apple',
-      sector: 'technology',
-      current_price: 150.55
-    },
+    "Current Price",
+    "Shares",
+    "Average Cost",
+    "Return to Date"
   ]
 
   return (
@@ -70,7 +80,7 @@ export default function Home() {
       <Card>
         <CardBody>
           <div className="text-xl font-semibold py-4">Portfolio</div>
-          <Table names={names} headers={headers} rows={data}/>
+          <Table names={names} headers={headers} rows={portfolio}/>
         </CardBody>
       </Card>
     </main>
