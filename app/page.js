@@ -1,4 +1,4 @@
-import { Box, Container, Flex, Table } from "@radix-ui/themes"
+import { Card, Flex, Table } from "@radix-ui/themes"
 
 export default async function HomePage(){
 
@@ -45,8 +45,8 @@ export default async function HomePage(){
 
   return(
     <>
-      <Flex direction='column' p='4'>
-        <Box width='max-content'>
+      <Flex direction='column' align='start' p='4'>
+        <Card>
           <Table.Root>
             <Table.Header>
               <Table.Row>
@@ -65,7 +65,7 @@ export default async function HomePage(){
               ))}
             </Table.Body>
           </Table.Root>  
-        </Box>    
+        </Card>
       </Flex>
     </>
   )

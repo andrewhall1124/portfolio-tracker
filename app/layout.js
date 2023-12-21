@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className='min-h-screen flex flex-col'>
-      <Theme appearance="dark" accentColor="jade" grayColor="sand">  
+      <Theme appearance="dark" accentColor="jade" grayColor="sand" radius='large'>  
         {/* <ThemePanel/>         */}
         <Header/>
           {children}
