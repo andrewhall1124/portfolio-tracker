@@ -1,5 +1,7 @@
 import '@/styles/globals.css'
+import '@radix-ui/themes/styles.css';
 import Link from 'next/link'
+import { Button, Flex, Theme, ThemePanel } from '@radix-ui/themes';
 
 export const metadata = {
   title: 'Create Next App',
@@ -9,18 +11,14 @@ export const metadata = {
 function Header(){
   return(
     <>
-      <div className='flex p-4 gap-4 bg-slate-300'>
-        <Link href="/" replace>
-          <div>
-            Home
-          </div>
+      <Flex gap="7"p="5">
+        <Link href="/" replace>       
+          <Button variant='ghost' size='4'>Portfolio</Button>
         </Link>
-        <Link href="orders" replace>
-          <div>
-            Orders
-          </div>
+        <Link href="orders" replace>       
+          <Button variant='ghost' size='4'>Orders</Button>
         </Link>
-      </div>
+      </Flex>
     </>
   )
 }
@@ -29,8 +27,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className='min-h-screen flex flex-col'>
+      <Theme appearance="dark" accentColor="jade" grayColor="sand">  
+        {/* <ThemePanel/>         */}
         <Header/>
-        {children}
+          {children}
+        </Theme>
       </body>
     </html>
   )
