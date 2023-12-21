@@ -1,4 +1,5 @@
 import '@/styles/globals.css'
+import Link from 'next/link'
 
 export const metadata = {
   title: 'Create Next App',
@@ -7,9 +8,20 @@ export const metadata = {
 
 function Header(){
   return(
-    <div className=''>
-      
-    </div>
+    <>
+      <div className='flex p-4 gap-4 bg-slate-300'>
+        <Link href="/" replace>
+          <div>
+            Home
+          </div>
+        </Link>
+        <Link href="orders" replace>
+          <div>
+            Orders
+          </div>
+        </Link>
+      </div>
+    </>
   )
 }
 
@@ -17,7 +29,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className='min-h-screen flex flex-col'>
-      <Header/>
+        <Header/>
         {children}
       </body>
     </html>
