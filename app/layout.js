@@ -11,7 +11,7 @@ export const metadata = {
 function Header(){
   return(
     <>
-      <Flex gap="7"p="5">
+      <Flex gap="7"p="5" className='border-b border-white'>
         <Link href="/" replace>       
           <Button variant='ghost' size='4'>Portfolio</Button>
         </Link>
@@ -25,7 +25,7 @@ function Header(){
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className='min-h-screen flex flex-col'>
       <Theme appearance="dark" accentColor="jade" grayColor="sand">  
         {/* <ThemePanel/>         */}

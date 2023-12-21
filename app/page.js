@@ -1,3 +1,5 @@
+import { Box, Container, Flex, Table } from "@radix-ui/themes"
+
 export default async function HomePage(){
 
   const headers = [
@@ -20,31 +22,51 @@ export default async function HomePage(){
       current_price: 150.26,
       beta: 1.5,
       return_td: 5
-    }
+    },
+    {
+      ticker: 'AAPL',
+      current_price: 150.26,
+      beta: 1.5,
+      return_td: 5
+    },
+    {
+      ticker: 'AAPL',
+      current_price: 150.26,
+      beta: 1.5,
+      return_td: 5
+    },
+    {
+      ticker: 'AAPL',
+      current_price: 150.26,
+      beta: 1.5,
+      return_td: 5
+    },
   ]
 
   return(
     <>
-      <div className="flex flex-col items-start">
-        <table>
-          <thead>
-            <tr>
-              {headers.map((header, index) =>(
-                <td key={index}>{header}</td>
+      <Flex direction='column' p='4'>
+        <Box width='max-content'>
+          <Table.Root>
+            <Table.Header>
+              <Table.Row>
+                {headers.map((header, index) =>(
+                  <Table.ColumnHeaderCell key={index}>{header}</Table.ColumnHeaderCell>
+                ))}
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {rows.map((row, rowIndex) =>(
+                <Table.Row key={rowIndex}>
+                  {data.map((data, colIndex) =>(
+                    <Table.Cell key={colIndex}>{row[data]}</Table.Cell>
+                  ))}
+                </Table.Row>
               ))}
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row, rowIndex) =>(
-              <tr key={rowIndex}>
-                {data.map((key, colIndex) =>{
-                  <td key={colIndex}>{row[key]}</td>
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </Table.Body>
+          </Table.Root>  
+        </Box>    
+      </Flex>
     </>
   )
 }
