@@ -15,7 +15,7 @@ function Header(){
         <Link href="/" replace>       
           <Button variant='ghost'>Portfolio</Button>
         </Link>
-        <Link href="orders" replace>       
+        <Link href="/orders" replace>       
           <Button variant='ghost'>Orders</Button>
         </Link>
       </Flex>

@@ -40,7 +40,7 @@ async function OrdersTable(){
           </Table.Cell>
           ))}
           <Table.Cell>
-            <DotMenu/>
+            <DotMenu id={data.id}/>
           </Table.Cell>
         </Table.Row>
         ))}

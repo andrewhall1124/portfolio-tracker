@@ -41,7 +41,7 @@ export default function AddOrderCard(){
 
   return(
     <Card size='3'>
-      <Flex direction='column' gap='4'>
+      <Flex direction='column' gap='4' align='center'>
         <Heading align='center'>Add Order</Heading>
         <TextField.Input placeholder="Ticker" value={ticker} onChange={(event) => setTicker(event.target.value)}/>
         <TextField.Input placeholder="Date" value={date} onChange={(event) => setDate(event.target.value)}/>
