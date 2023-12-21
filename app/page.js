@@ -1,7 +1,11 @@
-import { DotsVerticalIcon } from "@radix-ui/react-icons"
+
+
+import getPortfolio from "@/data/getPortfolio"
 import { Flex, Table } from "@radix-ui/themes"
+import dayjs from "dayjs"
 
 export default async function HomePage(){
+  const rows = await getPortfolio()
 
   const headers = [
     'Ticker',
@@ -15,33 +19,6 @@ export default async function HomePage(){
     'current_price',
     'beta',
     'return_td'
-  ]
-
-  const rows = [
-    {
-      ticker: 'AAPL',
-      current_price: 150.26,
-      beta: 1.5,
-      return_td: 5
-    },
-    {
-      ticker: 'AAPL',
-      current_price: 150.26,
-      beta: 1.5,
-      return_td: 5
-    },
-    {
-      ticker: 'AAPL',
-      current_price: 150.26,
-      beta: 1.5,
-      return_td: 5
-    },
-    {
-      ticker: 'AAPL',
-      current_price: 150.26,
-      beta: 1.5,
-      return_td: 5
-    },
   ]
 
   return(
