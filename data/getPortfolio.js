@@ -1,6 +1,7 @@
 import supabase from "@/app/supabase";
 import dayjs from "dayjs";
 import round from "@/functions/round";
+import { unstable_noStore as noStore } from "next/cache";
 
 export default async function getPortfolio(){
   const orders = await getOrders()
@@ -47,6 +48,7 @@ export default async function getPortfolio(){
 }
 
 async function getOrders(){
+  noStore()
   try{
     const {data, error} = await supabase.from("orders").select()
 

@@ -1,8 +1,7 @@
 'use client'
 import { Dialog, DropdownMenu, AlertDialog, IconButton, Flex, Button, TextField } from "@radix-ui/themes"
 import { DotsVerticalIcon } from "@radix-ui/react-icons"
-import supabase from "@/app/supabase"
-import { revalidatePath, unstable_noStore as noStore } from "next/cache"
+import deleteOrder from "@/data/deleteOrder"
 
 function EditDialog(){
   return(
@@ -33,22 +32,6 @@ function EditDialog(){
 }
 
 function DeleteDialog({id}){
-  const deleteOrder = async () =>{
-    noStore()
-    try{
-      const {error} = await supabase.from('orders').delete().eq('id', id)
-      if(error){
-        console.error(error)
-      }
-      else{
-        revalidatePath('/orders')
-      }
-    }
-    catch(error){
-      console.error(error)
-    }
-  }
-
   return(
     <AlertDialog.Content style={{ maxWidth: 450 }}>
       <AlertDialog.Title>Delete order</AlertDialog.Title>
@@ -62,7 +45,7 @@ function DeleteDialog({id}){
           </Button>
         </AlertDialog.Cancel>
         <AlertDialog.Action>
-          <Button variant="solid" color="red" onClick={deleteOrder}>
+          <Button variant="solid" color="red" onClick={() =>deleteOrder(id)}>
             Delete order
           </Button>
         </AlertDialog.Action>
