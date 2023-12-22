@@ -1,6 +1,8 @@
 'use client'
 import { Dialog, DropdownMenu, AlertDialog, IconButton, Flex, Button, TextField } from "@radix-ui/themes"
 import { DotsVerticalIcon } from "@radix-ui/react-icons"
+import supabase from "@/app/supabase"
+import { revalidatePath, unstable_noStore as noStore } from "next/cache"
 
 function EditDialog(){
   return(
@@ -30,7 +32,23 @@ function EditDialog(){
   )
 }
 
-function DeleteDialog(){
+function DeleteDialog({id}){
+  const deleteOrder = async () =>{
+    noStore()
+    try{
+      const {error} = await supabase.from('orders').delete().eq('id', id)
+      if(error){
+        console.error(error)
+      }
+      else{
+        revalidatePath('/orders')
+      }
+    }
+    catch(error){
+      console.error(error)
+    }
+  }
+
   return(
     <AlertDialog.Content style={{ maxWidth: 450 }}>
       <AlertDialog.Title>Delete order</AlertDialog.Title>
@@ -44,7 +62,7 @@ function DeleteDialog(){
           </Button>
         </AlertDialog.Cancel>
         <AlertDialog.Action>
-          <Button variant="solid" color="red">
+          <Button variant="solid" color="red" onClick={deleteOrder}>
             Delete order
           </Button>
         </AlertDialog.Action>
@@ -53,7 +71,7 @@ function DeleteDialog(){
   )
 }
 
-export default function DotMenu(){
+export default function DotMenu({id}){
   return(
     <>
       <Dialog.Root>
@@ -77,8 +95,8 @@ export default function DotMenu(){
               </AlertDialog.Trigger>
             </DropdownMenu.Content>
           </DropdownMenu.Root>
-          <EditDialog/>
-          <DeleteDialog/>
+          <EditDialog id={id}/>
+          <DeleteDialog id={id}/>
         </AlertDialog.Root>
       </Dialog.Root>
     </>

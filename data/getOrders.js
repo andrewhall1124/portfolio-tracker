@@ -1,6 +1,8 @@
 import supabase from "@/app/supabase"
+import { unstable_noStore as noStore} from "next/cache"
 
 export default async function getOrders(){
+  noStore()
   try{
     const {data, error} = await supabase.from('orders').select()
 

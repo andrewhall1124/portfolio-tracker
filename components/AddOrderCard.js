@@ -1,7 +1,7 @@
 'use client'
 import { useState } from "react";
 import { Button, Card, Flex, Heading, TextField } from "@radix-ui/themes";
-import supabase from "@/app/supabase";
+import addOrder from "@/data/addOrder";
 
 export default function AddOrderCard(){
   const [ticker, setTicker] = useState("")
@@ -10,32 +10,13 @@ export default function AddOrderCard(){
   const [price, setPrice] = useState("")
   const [beta, setBeta] = useState("")
 
-  const postOrder = async () =>{
-    try{
-      const {error} = await supabase.from("orders").insert(
-        {
-          ticker: ticker,
-          purchase_date: date,
-          num_shares: shares,
-          purchase_price: price,
-          beta: beta,
-        }
-      )
-
-      if(!error){
-        console.log('success')
-        setTicker("")
-        setDate("")
-        setShares("")
-        setPrice("")
-        setBeta("")
-      }
-      else{
-        console.error(error)
-      }
-    }
-    catch(error){
-      console.error(error)
+  const handleSubmit = async () =>{
+    if(await addOrder(ticker, date, shares, price, beta)){
+      setTicker("")
+      setDate("")
+      setShares("")
+      setPrice("")
+      setBeta("")
     }
   }
 
@@ -48,7 +29,7 @@ export default function AddOrderCard(){
         <TextField.Input placeholder="Shares" value={shares} onChange={(event) => setShares(event.target.value)}/>
         <TextField.Input placeholder="Price" value={price} onChange={(event) => setPrice(event.target.value)}/>
         <TextField.Input placeholder="Beta" value={beta} onChange={(event) => setBeta(event.target.value)}/>
-        <Button onClick={postOrder}>Submit</Button>
+        <Button onClick={handleSubmit}>Submit</Button>
       </Flex>
     </Card>
   )
