@@ -1,22 +1,20 @@
 import supabase from "@/app/supabase";
 import dayjs from "dayjs";
+import round from "@/functions/round";
 
 export default async function getPortfolio(){
   const orders = await getOrders()
-  const tickers = orders.map(obj => obj.ticker)
-  console.log(tickers.join())
+  const tickers = orders.map(obj => obj.ticker).join()
 
   const earliestDate = orders.reduce((minDate, obj) => {
-    const currentDate = obj.date;
+    const currentDate = dayjs(obj.purchase_date);
     return currentDate < minDate ? currentDate : minDate;
-  }, new Date());
+  }, dayjs());
 
-  console.log(earliestDate)
+
   const timeFrame = '1D'
-  const startTime = dayjs('2023-09-01').format()
+  const startTime = earliestDate.format()
   const endTime = dayjs().startOf('day').format()
-  //console.log(startTime)
-
   const url = `https://data.alpaca.markets/v2/stocks/bars?symbols=${tickers}&timeframe=${timeFrame}&start=${startTime}&end=${endTime}&limit=1000&adjustment=raw&feed=sip&sort=asc`
   
   
@@ -29,16 +27,23 @@ export default async function getPortfolio(){
     }
   };
   
-  try{
-    // const response = await fetch(url, options)
-    // const data = await response.json()
-    // //console.log(data)
-    // return data
+  const response = await fetch(url, options)
+  const marketData = await response.json()
+
+  let portfolio = orders
+  for(const ticker of tickers.split(",")){
+    const stockPrices = marketData.bars[ticker]
+    const length = stockPrices.length
+    const currentPrice = stockPrices[length -1]['c']
+    for(const stock of portfolio){
+      if(stock.ticker == ticker){
+        stock['current_price'] = round(currentPrice)
+        stock['return_td'] = round((currentPrice / stock.average_cost - 1)*100)
+      }
+    }
   }
-  catch(error){
-    console.error(error)
-  }
-  return orders
+
+  return portfolio
 }
 
 async function getOrders(){
@@ -67,7 +72,7 @@ async function getOrders(){
       }, []);
       
       reducedData.forEach(tickerData => {
-        tickerData.average_cost = tickerData.total_cost / tickerData.num_shares;
+        tickerData.average_cost = round(tickerData.total_cost / tickerData.num_shares)
       });
       return reducedData
     }

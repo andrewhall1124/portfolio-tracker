@@ -9,6 +9,7 @@ export default async function HomePage(){
 
   const headers = [
     'Ticker',
+    'Average Cost',
     'Current Price',
     'Beta',
     'Return'
@@ -16,6 +17,7 @@ export default async function HomePage(){
 
   const data = [
     'ticker',
+    'average_cost',
     'current_price',
     'beta',
     'return_td'
