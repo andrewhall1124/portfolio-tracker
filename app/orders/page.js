@@ -1,11 +1,11 @@
-import { Button, DropdownMenu, Flex, Table } from "@radix-ui/themes";
+import { Flex, Table } from "@radix-ui/themes";
 import AddOrderCard from "@/components/AddOrderCard";
 import supabase from "../supabase";
-import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import DotMenu from "@/components/DotMenu";
+import getOrders from "@/data/getOrders";
 
 async function OrdersTable(){
-  const {data} = await supabase.from('orders').select()
+  const rows = await getOrders()
 
   const headers = [
     'Purhcase Date',
@@ -32,15 +32,15 @@ async function OrdersTable(){
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {data.map((data, rowIndex) =>(
+        {rows.map((row, rowIndex) =>(
         <Table.Row key={rowIndex}>
           {keys.map((key, colIndex) =>(
           <Table.Cell key={colIndex}>
-            {data[key]}
+            {row[key]}
           </Table.Cell>
           ))}
           <Table.Cell>
-            <DotMenu id={data.id}/>
+            <DotMenu id={row.id}/>
           </Table.Cell>
         </Table.Row>
         ))}
