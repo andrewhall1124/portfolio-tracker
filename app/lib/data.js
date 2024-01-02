@@ -1,10 +1,12 @@
-import supabase from "@/app/supabase";
+// Get
+
+import supabase from "@/app/lib/supabase";
 import dayjs from "dayjs";
-import round from "@/functions/round";
+import { round } from "@/app/lib/utils";
 import { unstable_noStore as noStore } from "next/cache";
 
-export default async function getPortfolio(){
-  const orders = await getOrders()
+export async function getPortfolio(){
+  const orders = await parseOrders()
   const tickers = orders.map(obj => obj.ticker).join()
 
   const earliestDate = orders.reduce((minDate, obj) => {
@@ -47,7 +49,7 @@ export default async function getPortfolio(){
   return portfolio
 }
 
-async function getOrders(){
+async function parseOrders(){
   noStore()
   try{
     const {data, error} = await supabase.from("orders").select()
@@ -86,3 +88,20 @@ async function getOrders(){
     console.error(error)
   }
 }
+
+export async function getOrders(){
+  noStore()
+  try{
+    const {data, error} = await supabase.from('orders').select()
+    if(data){
+      return data
+    }
+    if(error){
+      console.error(error)
+    }
+  }
+  catch(error){
+    console.error(error)
+  }
+}
+

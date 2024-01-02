@@ -1,7 +1,7 @@
 'use client'
 import { useState } from "react";
 import { Button, Card, Flex, Heading, TextField } from "@radix-ui/themes";
-import addOrder from "@/data/addOrder";
+import { addOrder } from "@/app/lib/actions";
 
 export default function AddOrderCard(){
   const [ticker, setTicker] = useState("")

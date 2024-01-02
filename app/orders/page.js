@@ -1,8 +1,8 @@
 import { Flex, Table } from "@radix-ui/themes";
-import AddOrderCard from "@/components/AddOrderCard";
-import supabase from "../supabase";
-import DotMenu from "@/components/DotMenu";
-import getOrders from "@/data/getOrders";
+import AddOrderCard from "@/ui/orders/AddOrderCard";
+import DotMenu from "@/ui/orders/DotMenu";
+import supabase from "@/app/lib/supabase";
+import { getOrders } from "@/app/lib/data";
 
 async function OrdersTable(){
   const rows = await getOrders()

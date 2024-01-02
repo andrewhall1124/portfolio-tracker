@@ -1,6 +1,4 @@
-
-
-import getPortfolio from "@/data/getPortfolio"
+import { getPortfolio } from "@/app/lib/data"
 import { Flex, Table } from "@radix-ui/themes"
 import dayjs from "dayjs"
 

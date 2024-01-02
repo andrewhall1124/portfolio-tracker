@@ -1,4 +1,4 @@
-import '@/styles/globals.css'
+import '@/ui/globals.css'
 import '@radix-ui/themes/styles.css';
 import Link from 'next/link'
 import { Button, Flex, Separator, Theme, ThemePanel } from '@radix-ui/themes';
