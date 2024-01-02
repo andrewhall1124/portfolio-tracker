@@ -1,12 +1,12 @@
 import { getPortfolio } from "@/app/lib/data"
 import { Flex, Table } from "@radix-ui/themes"
-import dayjs from "dayjs"
 
 export default async function HomePage(){
   const rows = await getPortfolio()
 
   const headers = [
     'Ticker',
+    'Shares',
     'Average Cost',
     'Current Price',
     'Beta',
@@ -15,6 +15,7 @@ export default async function HomePage(){
 
   const data = [
     'ticker',
+    'num_shares',
     'average_cost',
     'current_price',
     'beta',

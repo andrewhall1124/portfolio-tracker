@@ -4,21 +4,31 @@
 import supabase from "./supabase";
 import {revalidatePath } from "next/cache";
 
-export async function addOrder(ticker, date, shares, price, beta){
+export async function addOrder(prevState, formData){
+  const fields = {
+    ticker: formData.get('ticker'),
+    purchase_date: formData.get('purchase_date'),
+    num_shares: formData.get('num_shares'),
+    purchase_price: formData.get('purchase_price'),
+    beta: formData.get('beta'),
+  };
+
+  const {ticker, purchase_date, num_shares, purchase_price, beta} = fields
+  const purchase_price_cents = purchase_price * 100
+
   try{
     const {error} = await supabase.from("orders").insert(
       {
         ticker: ticker,
-        purchase_date: date,
-        num_shares: shares,
-        purchase_price: price,
+        purchase_date: purchase_date,
+        num_shares: num_shares,
+        purchase_price: purchase_price_cents,
         beta: beta,
       }
     )
 
     if(!error){
       revalidatePath('/orders')
-      return true
     }
     else{
       console.error(error)
@@ -26,7 +36,11 @@ export async function addOrder(ticker, date, shares, price, beta){
   }
   catch(error){
     console.error(error)
+    return {
+      message: 'Database Error: Failed to Create Invoice.',
+    }
   }
+  revalidatePath('orders')
 }
 
 export async function updateOrder({id, body}){

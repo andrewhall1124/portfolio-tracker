@@ -19,7 +19,6 @@ function EditDialog({id}){
         const {data, error} = await supabase.from('orders').select().eq("id", id)
   
         if(data){
-          console.log(data)
           setOrder(data[0])
         }
   
@@ -36,7 +35,6 @@ function EditDialog({id}){
 
   useEffect(()=>{
     if(order){
-      console.log(order)
       setTicker(order.ticker)
       setDate(toString(order.purhcase_date))
       setShares(order.num_shares)

@@ -1,36 +1,28 @@
 'use client'
-import { useState } from "react";
+
 import { Button, Card, Flex, Heading, TextField } from "@radix-ui/themes";
+import { useFormState } from 'react-dom';
 import { addOrder } from "@/app/lib/actions";
+import { unstable_noStore as noStore } from "next/cache";
 
 export default function AddOrderCard(){
-  const [ticker, setTicker] = useState("")
-  const [date, setDate] = useState("")
-  const [shares, setShares] = useState("")
-  const [price, setPrice] = useState("")
-  const [beta, setBeta] = useState("")
-
-  const handleSubmit = async () =>{
-    if(await addOrder(ticker, date, shares, price, beta)){
-      setTicker("")
-      setDate("")
-      setShares("")
-      setPrice("")
-      setBeta("")
-    }
-  }
+  noStore()
+  const initialState = { message: null, errors: {} };
+  const [state, dispatch] = useFormState(addOrder, initialState);
 
   return(
     <Card size='3'>
-      <Flex direction='column' gap='4' align='center'>
-        <Heading align='center'>Add Order</Heading>
-        <TextField.Input placeholder="Ticker" value={ticker} onChange={(event) => setTicker(event.target.value)}/>
-        <TextField.Input placeholder="Date" value={date} onChange={(event) => setDate(event.target.value)}/>
-        <TextField.Input placeholder="Shares" value={shares} onChange={(event) => setShares(event.target.value)}/>
-        <TextField.Input placeholder="Price" value={price} onChange={(event) => setPrice(event.target.value)}/>
-        <TextField.Input placeholder="Beta" value={beta} onChange={(event) => setBeta(event.target.value)}/>
-        <Button onClick={handleSubmit}>Submit</Button>
-      </Flex>
+      <form action={dispatch} id="add-order-card">
+        <Flex direction='column' gap='4' align='center'>
+          <Heading align='center'>Add Order</Heading>
+          <TextField.Input name="ticker" placeholder="Ticker"/>
+          <TextField.Input name="purchase_date" placeholder="Date"/>
+          <TextField.Input name="num_shares" placeholder="Shares"/>
+          <TextField.Input name="purchase_price" placeholder="Price"/>
+          <TextField.Input name="beta" placeholder="Beta"/>
+          <Button type="submit">Submit</Button>
+        </Flex>
+      </form>
     </Card>
   )
 }
