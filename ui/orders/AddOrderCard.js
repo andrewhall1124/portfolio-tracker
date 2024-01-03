@@ -1,28 +1,49 @@
 'use client'
 
 import { Button, Card, Flex, Heading, TextField } from "@radix-ui/themes";
-import { useFormState } from 'react-dom';
 import { addOrder } from "@/app/lib/actions";
-import { unstable_noStore as noStore } from "next/cache";
+import { useState, useMemo } from "react";
+import { revalidatePath } from "next/cache";
 
 export default function AddOrderCard(){
-  noStore()
-  const initialState = { message: null, errors: {} };
-  const [state, dispatch] = useFormState(addOrder, initialState);
+  const [ticker, setTicker] = useState("")
+  const [date, setDate] = useState("")
+  const [shares, setShares] = useState("")
+  const [price, setPrice] = useState("")
+  const [beta, setBeta] = useState("")
+
+  const body = useMemo(() => {
+    return {
+      ticker: ticker,
+      purchase_date: date,
+      num_shares: shares,
+      purchase_price: price,
+      beta: beta,
+    };
+  }, [ticker, date, shares, price, beta]);
+
+  const handleAdd = async () =>{
+    const response = await addOrder(body)
+    if(response.status == 200){
+      setTicker("")
+      setDate("")
+      setShares("")
+      setPrice("")
+      setBeta("")
+    }
+  }
 
   return(
     <Card size='3'>
-      <form action={dispatch} id="add-order-card">
-        <Flex direction='column' gap='4' align='center'>
-          <Heading align='center'>Add Order</Heading>
-          <TextField.Input name="ticker" placeholder="Ticker"/>
-          <TextField.Input name="purchase_date" placeholder="Date"/>
-          <TextField.Input name="num_shares" placeholder="Shares"/>
-          <TextField.Input name="purchase_price" placeholder="Price"/>
-          <TextField.Input name="beta" placeholder="Beta"/>
-          <Button type="submit">Submit</Button>
-        </Flex>
-      </form>
+      <Flex direction='column' gap='4' align='center'>
+        <Heading align='center'>Add Order</Heading>
+        <TextField.Input placeholder="Ticker" value={ticker} onChange={(event)=>setTicker(event.target.value)}/>
+        <TextField.Input placeholder="Date" value={date} onChange={(event)=>setDate(event.target.value)}/>
+        <TextField.Input placeholder="Shares" value={shares} onChange={(event)=>setShares(event.target.value)}/>
+        <TextField.Input placeholder="Price" value={price} onChange={(event)=>setPrice(event.target.value)}/>
+        <TextField.Input placeholder="Beta" value={beta} onChange={(event)=>setBeta(event.target.value)}/>
+        <Button onClick={handleAdd}>Submit</Button>
+      </Flex>
     </Card>
   )
 }
