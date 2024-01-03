@@ -41,7 +41,7 @@ function EditDialog({id}){
       purchase_price: price * 100,
       beta: beta,
     }
-  },[ticker,date,shares,price,beta])
+  },[id,ticker,date,shares,price,beta])
 
   return(
     <Dialog.Content style={{ maxWidth: 450 }}>

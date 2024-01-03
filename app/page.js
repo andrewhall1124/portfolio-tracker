@@ -2,7 +2,7 @@ import { getPortfolio } from "@/lib/data"
 import { Flex, Table } from "@radix-ui/themes"
 
 export default async function HomePage(){
-  const rows = await getPortfolio()
+  //const rows = await getPortfolio()
 
   const headers = [
     'Ticker',
@@ -24,7 +24,7 @@ export default async function HomePage(){
 
   return(
     <>
-      <Flex direction='column' align='start' p='4'>
+      {/* <Flex direction='column' align='start' p='4'>
         <Table.Root variant="surface">
           <Table.Header>
             <Table.Row>
@@ -43,7 +43,7 @@ export default async function HomePage(){
             ))}
           </Table.Body>
         </Table.Root>  
-      </Flex>
+      </Flex> */}
     </>
   )
 }
