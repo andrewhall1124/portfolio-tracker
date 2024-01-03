@@ -1,9 +1,9 @@
 'use client'
 
 import { Button, Card, Flex, Heading, TextField } from "@radix-ui/themes";
-import { addOrder } from "@/app/lib/actions";
+import { addOrder } from "@/lib/actions";
 import { useState, useMemo } from "react";
-import { revalidatePath } from "next/cache";
+import { Calendar } from "@/components/ui/calendar";
 
 export default function AddOrderCard(){
   const [ticker, setTicker] = useState("")
@@ -38,10 +38,16 @@ export default function AddOrderCard(){
       <Flex direction='column' gap='4' align='center'>
         <Heading align='center'>Add Order</Heading>
         <TextField.Input placeholder="Ticker" value={ticker} onChange={(event)=>setTicker(event.target.value)}/>
-        <TextField.Input placeholder="Date" value={date} onChange={(event)=>setDate(event.target.value)}/>
+        {/* <TextField.Input placeholder="Date" value={date} onChange={(event)=>setDate(event.target.value)}/> */}
         <TextField.Input placeholder="Shares" value={shares} onChange={(event)=>setShares(event.target.value)}/>
         <TextField.Input placeholder="Price" value={price} onChange={(event)=>setPrice(event.target.value)}/>
         <TextField.Input placeholder="Beta" value={beta} onChange={(event)=>setBeta(event.target.value)}/>
+        <Calendar
+          mode="single"
+          selected={date}
+          onSelect={setDate}
+          className="rounded-md border"
+        />
         <Button onClick={handleAdd}>Submit</Button>
       </Flex>
     </Card>

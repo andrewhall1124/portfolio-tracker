@@ -1,5 +1,5 @@
-import DotMenu from "@/ui/orders/DotMenu";
-import { getOrders } from "@/app/lib/data";
+import DotMenu from "@/components/orders/DotMenu";
+import { getOrders } from "@/lib/data";
 import { Table } from "@radix-ui/themes";
 
 export default async function OrdersTable(){

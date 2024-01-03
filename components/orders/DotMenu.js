@@ -2,8 +2,8 @@
 import { Dialog, DropdownMenu, AlertDialog, IconButton, Flex, Button, TextField } from "@radix-ui/themes"
 import { DotsVerticalIcon } from "@radix-ui/react-icons"
 import { useState, useEffect } from "react"
-import { deleteOrder, editOrder } from "@/app/lib/actions"
-import supabase from "@/app/lib/supabase"
+import { deleteOrder, editOrder } from "@/lib/actions"
+import supabase from "@/lib/supabase"
 
 function EditDialog({id}){
   const [order, setOrder] = useState({})

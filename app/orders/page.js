@@ -1,8 +1,6 @@
 import { Flex } from "@radix-ui/themes";
-import AddOrderCard from "@/ui/orders/AddOrderCard";
-import OrdersTable from "@/ui/orders/OrdersTable";
-
-
+import AddOrderCard from "@/components/orders/AddOrderCard";
+import OrdersTable from "@/components/orders/OrdersTable";
 
 export default async function Page(){
   return(
