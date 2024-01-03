@@ -9,14 +9,16 @@ export default async function OrdersTable(){
     'Purhcase Date',
     'Ticker',
     'Shares',
-    'Price'
+    'Price',
+    'Beta',
   ]
 
   const keys = [
     'purchase_date',
     'ticker',
     'num_shares',
-    'purchase_price'
+    'purchase_price',
+    'beta',
   ]
 
   return(
@@ -33,9 +35,14 @@ export default async function OrdersTable(){
         {rows.map((row, rowIndex) =>(
         <Table.Row key={rowIndex}>
           {keys.map((key, colIndex) =>(
-          <Table.Cell key={colIndex}>
-            {row[key]}
-          </Table.Cell>
+            key == 'purchase_price' ?
+            <Table.Cell key={colIndex}>
+              {row[key] / 100}
+            </Table.Cell>
+            :
+            <Table.Cell key={colIndex}>
+              {row[key]}
+            </Table.Cell>
           ))}
           <Table.Cell>
             <DotMenu id={row.id}/>

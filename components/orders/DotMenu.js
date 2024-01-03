@@ -1,9 +1,10 @@
 'use client'
 import { Dialog, DropdownMenu, AlertDialog, IconButton, Flex, Button, TextField } from "@radix-ui/themes"
 import { DotsVerticalIcon } from "@radix-ui/react-icons"
-import { useState, useEffect } from "react"
-import { deleteOrder, editOrder } from "@/lib/actions"
-import supabase from "@/lib/supabase"
+import { useState, useEffect, useMemo } from "react"
+import { deleteOrder, updateOrder } from "@/lib/actions"
+import { fetchOrderById } from "@/lib/data"
+import { DatePicker } from "../ui/datePicker"
 
 function EditDialog({id}){
   const [order, setOrder] = useState({})
@@ -13,39 +14,34 @@ function EditDialog({id}){
   const [price, setPrice] = useState("")
   const [beta, setBeta] = useState("")
 
-  useEffect(() =>{
-    const getOrder = async () =>{
-      try{
-        const {data, error} = await supabase.from('orders').select().eq("id", id)
-  
-        if(data){
-          setOrder(data[0])
-        }
-  
-        if(error){
-          console.error(error)
-        }
-      }
-      catch(error){
-        console.error(error)
-      }
+  useEffect(()=>{
+    const fetchData = async () =>{
+      const response = await fetchOrderById(id)
+      setOrder(response)
     }
-    getOrder()
-  },[])
+    fetchData()
+  },[id])
 
   useEffect(()=>{
     if(order){
       setTicker(order.ticker)
-      setDate(toString(order.purhcase_date))
+      setDate(order.purchase_date)
       setShares(order.num_shares)
-      setPrice(toString(order.purhcase_price))
+      setPrice(order.purchase_price /100)
       setBeta(order.beta)
     }
   },[order])
 
-  const handleEdit = async =>{
-
-  }
+  const body = useMemo(()=>{
+    return{
+      id: id,
+      ticker: ticker,
+      purchase_date: date,
+      num_shares: shares,
+      purchase_price: price * 100,
+      beta: beta,
+    }
+  },[ticker,date,shares,price,beta])
 
   return(
     <Dialog.Content style={{ maxWidth: 450 }}>
@@ -54,11 +50,11 @@ function EditDialog({id}){
         Make changes to your order.
       </Dialog.Description>
       <Flex direction='column' gap='4'>
-        <TextField.Input placeholder="Ticker" value={ticker} />
-        <TextField.Input placeholder="Date" value={date} />
-        <TextField.Input placeholder="Shares" value={shares} />
-        <TextField.Input placeholder="Price" value={price}/>
-        <TextField.Input placeholder="Beta" value={beta} />
+        <TextField.Input placeholder="Ticker" value={ticker} onChange={(event)=>setTicker(event.target.value)}/>
+        <DatePicker value={date} setValue={setDate}/>
+        <TextField.Input placeholder="Shares" value={shares} onChange={(event)=>setShares(event.target.value)}/>
+        <TextField.Input placeholder="Price" value={price} onChange={(event)=>setPrice(event.target.value)}/>
+        <TextField.Input placeholder="Beta" value={beta} onChange={(event)=>setBeta(event.target.value)}/>
       </Flex>
       <Flex gap="3" mt="4" justify="end">
         <Dialog.Close>
@@ -67,7 +63,7 @@ function EditDialog({id}){
           </Button>
         </Dialog.Close>
         <Dialog.Close>
-          <Button>Save</Button>
+          <Button onClick={() =>updateOrder(body)}>Save</Button>
         </Dialog.Close>
       </Flex>
     </Dialog.Content>
