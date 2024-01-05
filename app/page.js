@@ -1,4 +1,4 @@
-import { getPortfolio } from "@/lib/portfolio"
+import { getPortfolio } from "@/lib/data"
 import { Flex, Table } from "@radix-ui/themes"
 
 export default async function HomePage(){
