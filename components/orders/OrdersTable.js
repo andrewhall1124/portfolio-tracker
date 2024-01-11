@@ -6,7 +6,7 @@ export default async function OrdersTable(){
   const rows = await getOrders()
 
   const headers = [
-    'Purhcase Date',
+    'Purhcase Date', 
     'Ticker',
     'Shares',
     'Price',
