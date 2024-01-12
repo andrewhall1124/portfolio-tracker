@@ -15,10 +15,6 @@ export default async function HomePage(){
 
   const getBackgroundColor = (value) => {
     let hue = 0
-    let lightness = 0
-    const max = 100
-    const min = -50
-
     if (value < 0) {
       // When the value is -50 the hue should be 0,
       // when the value is 0 the hue should be 60
@@ -28,10 +24,7 @@ export default async function HomePage(){
       // When the value is 0 the hue should be 90
       hue = 80 + (value * .5)
     }
-    
-  
     const hsl = `hsl(${hue}, 50%, 50%)`;
-  
     return hsl;
   };
 
