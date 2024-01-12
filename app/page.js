@@ -30,6 +30,7 @@ export default async function HomePage(){
 
   return(
     <>
+      {/* Desktop */}
       <div className="hidden sm:block">
         <Flex direction='column' align='start' p='4'>
           <Table.Root variant="surface">
@@ -59,7 +60,16 @@ export default async function HomePage(){
           </Table.Root>  
         </Flex>
       </div>
+
+      {/* Mobile */}
       <div className="sm:hidden">
+        <div className="p-4">
+          <Heading>Portfolio</Heading>
+        </div>
+        <Flex>
+          Return to date:
+        </Flex>
+        <Separator size='4'/>
         <div className="p-4">
           <Heading>Holdings</Heading>
         </div>

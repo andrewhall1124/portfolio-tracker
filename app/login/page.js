@@ -40,7 +40,7 @@ export default function Page(){
             <TextField.Input placeholder="Enter your password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
           </Flex>
           <Flex align='center' gap='2'>
-            <Text>Don't have an account?</Text>
+            <Text>Don&apos;t have an account?</Text>
             <Button variant="ghost" onClick={()=>router.push('signup')}>Sign up</Button>
           </Flex>
           <Flex gap='4' justify='end'>
