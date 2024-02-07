@@ -49,7 +49,7 @@ export default async function HomePage(){
                   <Table.Cell>${row.average_cost}</Table.Cell>
                   <Table.Cell>{row.beta}</Table.Cell>
                   <Table.Cell>${row.current_price}</Table.Cell>
-                  {row.ticker == 'XPEL' ?
+                  {(row.ticker == 'XPEL') || (row.ticker == "LRCX") ?
                   <Table.Cell style={{color: getBackgroundColor(-row.return_td)}}>{-row.return_td}%</Table.Cell>
                   :
                   <Table.Cell style={{color: getBackgroundColor(row.return_td)}}>{row.return_td}%</Table.Cell>
@@ -63,15 +63,10 @@ export default async function HomePage(){
 
       {/* Mobile */}
       <div className="sm:hidden">
-        <div className="p-4">
-          <Heading>Portfolio</Heading>
-        </div>
-        <Flex>
-          Return to date:
-        </Flex>
         <Separator size='4'/>
-        <div className="p-4">
+        <div className="p-4 flex justify-between items-center">
           <Heading>Holdings</Heading>
+          <div>Return since purchase</div>
         </div>
         <Separator size='4'/>
         <Flex direction='column'>

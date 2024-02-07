@@ -11,7 +11,7 @@ export const metadata = {
 function Header(){
   return(
     <>
-      <Flex p="4" gap='4'>
+      {/* <Flex p="4" gap='4'>
         <Link href="/" replace>       
           <Button variant='ghost'>Portfolio</Button>
         </Link>
@@ -19,7 +19,8 @@ function Header(){
           <Button variant='ghost'>Orders</Button>
         </Link>
       </Flex>
-      <Separator size='4'/>
+      <Separator size='4'/> */}
+      <div className='text-3xl font-bold p-4'>Silver Fund Portfolio</div>
     </>
   )
 }
@@ -28,8 +29,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className='min-h-screen flex flex-col'>
-      <Theme appearance="dark" accentColor="jade" grayColor="sand" radius='large' scaling='110%'>  
-        <Header/>
+        <Theme appearance="dark" accentColor="jade" grayColor="sand" radius='large' scaling='110%'>  
+          <Header/>
           {children}
         </Theme>
       </body>
