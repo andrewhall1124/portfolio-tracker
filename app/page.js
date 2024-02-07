@@ -78,7 +78,7 @@ export default async function HomePage(){
                 <Text size='3' color='gray'>{row.num_shares} Shares</Text>
               </Flex>
               <div style={{background: getBackgroundColor(row.return_td)}} className="p-2 rounded-xl w-[90px] flex justify-center items-center">
-                {row.return_td}%
+                {(row.ticker == 'XPEL') || (row.ticker == "LRCX") ? -row.return_td : row.return_td}
               </div>
             </Flex>
             <Separator size='4'/>
